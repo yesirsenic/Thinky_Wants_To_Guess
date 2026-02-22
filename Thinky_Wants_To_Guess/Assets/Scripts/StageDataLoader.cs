@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ public class StageDataLoader : MonoBehaviour
 {
     public List<StageData> stageDataList = new List<StageData>();
 
-    public LevelButton[] levelButtons;
+    public StageButton[] stageButtons;
 
     void Awake()
     {
@@ -14,7 +15,7 @@ public class StageDataLoader : MonoBehaviour
 
     private void Start()
     {
-        SetupStage(GameManager.Instance.stageNum);
+        SetupStage();
     }
 
     void LoadCSV()
@@ -30,36 +31,19 @@ public class StageDataLoader : MonoBehaviour
 
             StageData data = new StageData();
             data.Stage_Num = int.Parse(values[0]);
-            data.Level_Num = int.Parse(values[1]);
-            data.Suggest_Word = values[2];
-            data.IsClear = bool.Parse(values[3]);
+            data.IsClear = bool.Parse(values[1]);
 
             stageDataList.Add(data);
         }
     }
 
-    List<StageData> GetStageLevels(int stageNum)
+    void SetupStage()
     {
-        List<StageData> result = new List<StageData>();
+        
 
-        foreach (var data in stageDataList)
+        for (int i = 0; i < stageButtons.Length; i++)
         {
-            if (data.Stage_Num == stageNum)
-            {
-                result.Add(data);
-            }
-        }
-
-        return result;
-    }
-
-     void SetupStage(int stageNum)
-    {
-        List<StageData> levels = GetStageLevels(stageNum);
-
-        for (int i = 0; i < levelButtons.Length; i++)
-        {
-            levelButtons[i].Setup(levels[i]);
+            stageButtons[i].Setup(stageDataList[i]);
         }
     }
 }

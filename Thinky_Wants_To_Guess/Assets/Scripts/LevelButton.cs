@@ -8,7 +8,7 @@ public class LevelButton : MonoBehaviour
     public string suggestWord;
     public bool isClear;
 
-    public void Setup(StageData data)
+    public void Setup(StageLevelData data)
     {
         levelNum = data.Level_Num;
         suggestWord = data.Suggest_Word;

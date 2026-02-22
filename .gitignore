@@ -1,0 +1,80 @@
+# ========== Unity ==========
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+
+# Visual Studio cache
+.vs/
+
+# Crash Reports
+sysinfo.txt
+
+# ========== Generated files ==========
+ExportedObj/
+*.unitypackage
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# ========== OS Files ==========
+# Windows files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS files
+.DS_Store
+.DS_Store?
+._*
+
+# ========== IDE & Editor ==========
+# Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains Rider
+*.DotSettings.user
+
+# ========== Build artifacts ==========
+*.apk
+*.aab
+*.app
+*.exe
+*.dll
+*.so
+*.dylib
+
+# ========== Unity Asset Store files ==========
+*.unitypackage
+
+# ========== Auto-generated meta ==========
+# (Unity manages meta files; keep them except for ignored folders)
+# If a folder is ignored, meta is ignored automatically.
+
+# ========== Logs ==========
+*.log
+
+# ========== Others ==========
+# Python cache (if you run scripts)
+__pycache__/
+*.pyc
+
+# Temporary
+*.tmp
+*.temp
+
+# ========== Firebase / Google Keys ==========
+google-services.json
+GoogleService-Info.plist

@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Stage_PageButton.cs" />
     <Compile Include="Assets\Scripts\StageButton.cs" />
     <Compile Include="Assets\Scripts\StageLevelDataLoader.cs" />
+    <Compile Include="Assets\Scripts\UIManager.cs" />
     <Compile Include="Assets\Scripts\StageDataLoader.cs" />
     <Compile Include="Assets\Scripts\StageData.cs" />
   </ItemGroup>

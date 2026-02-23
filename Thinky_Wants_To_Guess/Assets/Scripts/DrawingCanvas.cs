@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class DrawingCanvas : MonoBehaviour
@@ -19,12 +19,15 @@ public class DrawingCanvas : MonoBehaviour
 
     void Start()
     {
+        
         drawingRT = new RenderTexture(1400, 600, 0);
         drawingRT.Create();
 
         drawingView.texture = drawingRT;
         Clear();
 
+        brushColor = Color.black;
+        brushMaterial.SetColor("_Color", brushColor);
         SetBrushPencil();
     }
 
@@ -69,11 +72,11 @@ public class DrawingCanvas : MonoBehaviour
 
         Rect rectArea = rect.rect;
 
-        // µµÈ­Áö ¹üÀ§ ¹ÛÀÌ¸é ¹«½Ã
+        // ë„í™”ì§€ ë²”ìœ„ ë°–ì´ë©´ ë¬´ì‹œ
         if (!rectArea.Contains(localPoint))
             return false;
 
-        // local ÁÂÇ¥¸¦ 0~1 UV·Î º¯È¯
+        // local ì¢Œí‘œë¥¼ 0~1 UVë¡œ ë³€í™˜
         float x = (localPoint.x - rectArea.x) / rectArea.width;
         float y = (localPoint.y - rectArea.y) / rectArea.height;
 
@@ -161,12 +164,5 @@ public class DrawingCanvas : MonoBehaviour
 
         brushSize = setting.size;
 
-        // ¾ËÆÄ Àû¿ë
-        brushColor = new Color(
-            brushColor.r,
-            brushColor.g,
-            brushColor.b,
-            setting.alpha
-        );
     }
 }

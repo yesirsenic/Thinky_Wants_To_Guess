@@ -273,6 +273,9 @@ MonoBehaviour:
   brushSetting:
     size: 18
     alpha: 0.7
+  eraserSetting:
+    size: 15
+    alpha: 1
 --- !u!4 &98459253
 Transform:
   m_ObjectHideFlags: 0
@@ -3083,7 +3086,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1312437148}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 98459252}
+        m_TargetAssemblyTypeName: DrawingCanvas, Assembly-CSharp
+        m_MethodName: Clear
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1312437148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5842,7 +5857,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2078528140}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 98459252}
+        m_TargetAssemblyTypeName: DrawingCanvas, Assembly-CSharp
+        m_MethodName: SetBrushEraser
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2078528140
 MonoBehaviour:
   m_ObjectHideFlags: 0

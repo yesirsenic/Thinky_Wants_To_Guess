@@ -13,6 +13,7 @@ public class DrawingCanvas : MonoBehaviour
     public BrushSetting pencilSetting;
     public BrushSetting penSetting;
     public BrushSetting brushSetting;
+    public BrushSetting eraserSetting;
 
     private RenderTexture drawingRT;
     private Vector2? lastUV = null;
@@ -109,6 +110,12 @@ public class DrawingCanvas : MonoBehaviour
         ApplyBrushSettings();
     }
 
+    public void SetBrushEraser()
+    {
+        currentBrush = BrushType.Eraser;
+        brushSize = eraserSetting.size;
+    }
+
     public void SetBrushColor(Color color)
     {
         brushColor = color;
@@ -133,7 +140,12 @@ public class DrawingCanvas : MonoBehaviour
 
         brushMaterial.SetVector("_Coordinate", uv);
         brushMaterial.SetFloat("_Size", sizeUV);
-        brushMaterial.SetColor("_Color", brushColor);
+
+        Color finalColor = currentBrush == BrushType.Eraser
+            ? Color.white
+            : brushColor;
+
+        brushMaterial.SetColor("_Color", finalColor);
 
         RenderTexture temp = RenderTexture.GetTemporary(drawingRT.width, drawingRT.height);
 
@@ -159,6 +171,10 @@ public class DrawingCanvas : MonoBehaviour
 
             case BrushType.Brush:
                 setting = brushSetting;
+                break;
+
+            case BrushType.Eraser:
+                setting = eraserSetting;
                 break;
         }
 

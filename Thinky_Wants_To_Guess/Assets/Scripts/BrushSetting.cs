@@ -2,7 +2,8 @@ public enum BrushType
 {
     Pencil,
     Pen,
-    Brush
+    Brush,
+    Eraser
 }
 
 [System.Serializable]

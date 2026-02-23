@@ -5,8 +5,14 @@ public class DrawingCanvas : MonoBehaviour
 {
     public RawImage drawingView;
     public Material brushMaterial;
-    public float brushSize = 0.03f;
+    public float brushSize = 10f;
     public Color brushColor = Color.black;
+
+    public BrushType currentBrush;
+
+    public BrushSetting pencilSetting;
+    public BrushSetting penSetting;
+    public BrushSetting brushSetting;
 
     private RenderTexture drawingRT;
     private Vector2? lastUV = null;
@@ -18,6 +24,8 @@ public class DrawingCanvas : MonoBehaviour
 
         drawingView.texture = drawingRT;
         Clear();
+
+        SetBrushPencil();
     }
 
     void Update()
@@ -80,6 +88,23 @@ public class DrawingCanvas : MonoBehaviour
         GL.Clear(true, true, Color.white);
         RenderTexture.active = prev;
     }
+    public void SetBrushPencil()
+    {
+        currentBrush = BrushType.Pencil;
+        ApplyBrushSettings();
+    }
+
+    public void SetBrushPen()
+    {
+        currentBrush = BrushType.Pen;
+        ApplyBrushSettings();
+    }
+
+    public void SetBrushBrush()
+    {
+        currentBrush = BrushType.Brush;
+        ApplyBrushSettings();
+    }
 
     void DrawLine(Vector2 from, Vector2 to)
     {
@@ -96,8 +121,10 @@ public class DrawingCanvas : MonoBehaviour
 
     void Draw(Vector2 uv)
     {
+        float sizeUV = brushSize / drawingRT.width;
+
         brushMaterial.SetVector("_Coordinate", uv);
-        brushMaterial.SetFloat("_Size", brushSize);
+        brushMaterial.SetFloat("_Size", sizeUV);
         brushMaterial.SetColor("_Color", brushColor);
 
         RenderTexture temp = RenderTexture.GetTemporary(drawingRT.width, drawingRT.height);
@@ -106,5 +133,35 @@ public class DrawingCanvas : MonoBehaviour
         Graphics.Blit(temp, drawingRT, brushMaterial);
 
         RenderTexture.ReleaseTemporary(temp);
+    }
+
+    void ApplyBrushSettings()
+    {
+        BrushSetting setting = null;
+
+        switch (currentBrush)
+        {
+            case BrushType.Pencil:
+                setting = pencilSetting;
+                break;
+
+            case BrushType.Pen:
+                setting = penSetting;
+                break;
+
+            case BrushType.Brush:
+                setting = brushSetting;
+                break;
+        }
+
+        brushSize = setting.size;
+
+        // 알파 적용
+        brushColor = new Color(
+            brushColor.r,
+            brushColor.g,
+            brushColor.b,
+            setting.alpha
+        );
     }
 }

@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\MainGameManager.cs" />
     <Compile Include="Assets\Scripts\LevelButton.cs" />
+    <Compile Include="Assets\Scripts\DrawingCanvas.cs" />
     <Compile Include="Assets\Scripts\StageLevelData.cs" />
     <Compile Include="Assets\Scripts\ButtonManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
@@ -70,6 +71,9 @@
     <Compile Include="Assets\Scripts\StageLevelDataLoader.cs" />
     <Compile Include="Assets\Scripts\StageDataLoader.cs" />
     <Compile Include="Assets\Scripts\StageData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Resources\Shader\BrushShader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

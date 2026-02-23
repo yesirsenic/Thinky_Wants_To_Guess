@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
     public int stageNum { get; set; }
 
+    public string suggestWord { get; set; }
+
 
 
     private void Awake()

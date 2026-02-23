@@ -25,4 +25,9 @@ public class ButtonManager : MonoBehaviour
         SceneManager.LoadScene("LevelSelct");
     }
 
+    public void ToMainGame()
+    {
+        SceneManager.LoadScene("MainGame");
+    }
+
 }

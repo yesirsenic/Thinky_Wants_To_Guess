@@ -16,4 +16,9 @@ public class LevelButton : MonoBehaviour
 
         Debug.Log($"레벨:{levelNum} / 단어:{suggestWord} / 클리어:{isClear}");
     }
+
+    public void SetSuggestWord()
+    {
+        GameManager.Instance.suggestWord = suggestWord;
+    }
 }

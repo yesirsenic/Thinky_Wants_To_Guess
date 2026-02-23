@@ -106,6 +106,11 @@ public class DrawingCanvas : MonoBehaviour
         ApplyBrushSettings();
     }
 
+    public void SetBrushColor(Color color)
+    {
+        brushColor = color;
+    }
+
     void DrawLine(Vector2 from, Vector2 to)
     {
         float distance = Vector2.Distance(from, to);

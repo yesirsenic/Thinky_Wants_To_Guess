@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\DrawingCanvas.cs" />
     <Compile Include="Assets\Scripts\StageLevelData.cs" />
     <Compile Include="Assets\Scripts\ButtonManager.cs" />
+    <Compile Include="Assets\Scripts\ColorManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Stage_PageButton.cs" />
     <Compile Include="Assets\Scripts\StageButton.cs" />

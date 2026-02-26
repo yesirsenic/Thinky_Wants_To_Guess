@@ -121,6 +121,20 @@ public class DrawingCanvas : MonoBehaviour
         brushColor = color;
     }
 
+    public Texture2D GetTexture()
+    {
+        RenderTexture current = RenderTexture.active;
+        RenderTexture.active = drawingRT;
+
+        Texture2D tex = new Texture2D(drawingRT.width, drawingRT.height);
+        tex.ReadPixels(new Rect(0, 0, drawingRT.width, drawingRT.height), 0, 0);
+        tex.Apply();
+
+        RenderTexture.active = current;
+
+        return tex;
+    }
+
     void DrawLine(Vector2 from, Vector2 to)
     {
         float distance = Vector2.Distance(from, to);

@@ -7,6 +7,7 @@ public class LevelButton : MonoBehaviour
 {
     public int levelNum;
     public string suggestWord;
+    public string suggestKey;
     public bool isClear;
 
     [SerializeField]
@@ -20,8 +21,10 @@ public class LevelButton : MonoBehaviour
         levelNum = data.Level_Num;
         suggestWord = data.Suggest_Word;
         isClear = data.IsClear;
+        suggestKey = data.Key_Suggest;
 
-        suggestText.text = suggestWord;
+        suggestText.gameObject.GetComponent<LocalizedSuggestWord>().SetWord(suggestKey);
+        
 
         if(!isClear)
         {

@@ -32,7 +32,8 @@ public class StageLevelDataLoader : MonoBehaviour
             data.Stage_Num = int.Parse(values[0]);
             data.Level_Num = int.Parse(values[1]);
             data.Suggest_Word = values[2];
-            data.IsClear = bool.Parse(values[3]);
+            data.Key_Suggest = values[3];
+            data.IsClear = bool.Parse(values[4]);
 
             stageDataList.Add(data);
         }

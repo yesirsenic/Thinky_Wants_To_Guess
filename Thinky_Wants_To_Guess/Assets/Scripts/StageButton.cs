@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StageButton : MonoBehaviour
 {
@@ -12,6 +13,13 @@ public class StageButton : MonoBehaviour
         stageNum = data.Stage_Num;
         isClear = data.IsClear;
 
-        Debug.Log($"스테이지:{stageNum} / 클리어:{isClear}");
+        if(!isClear)
+        {
+            if(transform.childCount != 0)
+            {
+                transform.GetChild(0).gameObject.SetActive(true);
+                gameObject.GetComponent<Button>().interactable = false;
+            }
+        }
     }
 }

@@ -40,5 +40,6 @@ public class LevelButton : MonoBehaviour
     public void SetSuggestWord()
     {
         GameManager.Instance.suggestWord = suggestWord;
+        GameManager.Instance.suggestKey = suggestKey;
     }
 }

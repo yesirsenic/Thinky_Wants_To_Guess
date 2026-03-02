@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     public string suggestWord { get; set; }
 
+    public string suggestKey { get; set; }
+
 
 
     private void Awake()

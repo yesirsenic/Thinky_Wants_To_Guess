@@ -10,6 +10,6 @@ public class MainGameManager : MonoBehaviour
 
     private void Start()
     {
-        suggestWord.text = GameManager.Instance.suggestWord;
+        suggestWord.GetComponent<LocalizedSuggestWord>().SetWord(GameManager.Instance.suggestKey);
     }
 }

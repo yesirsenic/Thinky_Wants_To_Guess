@@ -58,7 +58,8 @@ public class AIManager : MonoBehaviour
         }
 
         Texture2D texture = drawingCanvas.GetTexture();
-        StartCoroutine(SendToAI(texture, answer));
+        Texture2D resized = ResizeTexture(texture, 700, 300);
+        StartCoroutine(SendToAI(resized, answer));
     }
 
     IEnumerator SendToAI(Texture2D texture, string answer)
@@ -178,6 +179,24 @@ $@"{{
                   .Replace("\"", "\\\"")
                   .Replace("\n", "\\n")
                   .Replace("\r", "");
+    }
+
+    Texture2D ResizeTexture(Texture2D source, int targetWidth, int targetHeight)
+    {
+        RenderTexture rt = RenderTexture.GetTemporary(targetWidth, targetHeight);
+        Graphics.Blit(source, rt);
+
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = rt;
+
+        Texture2D result = new Texture2D(targetWidth, targetHeight, TextureFormat.RGB24, false);
+        result.ReadPixels(new Rect(0, 0, targetWidth, targetHeight), 0, 0);
+        result.Apply();
+
+        RenderTexture.active = previous;
+        RenderTexture.ReleaseTemporary(rt);
+
+        return result;
     }
 
     void GameClear(int score, string comment)

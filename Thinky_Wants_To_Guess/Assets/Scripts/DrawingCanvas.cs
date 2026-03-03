@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class DrawingCanvas : MonoBehaviour
@@ -18,6 +20,12 @@ public class DrawingCanvas : MonoBehaviour
     private RenderTexture drawingRT;
     private Vector2? lastUV = null;
 
+    [SerializeField]
+    private Sprite[] drawingToolsImages;
+
+    [SerializeField]
+    private Image drawingToolButtonImage;
+
     void Start()
     {
         
@@ -34,6 +42,12 @@ public class DrawingCanvas : MonoBehaviour
 
     void Update()
     {
+        if (IsPointerOverUIExceptDrawing())
+        {
+            lastUV = null;
+            return;
+        }
+
         if (Input.GetMouseButton(0))
         {
             Vector2 uv;
@@ -83,6 +97,42 @@ public class DrawingCanvas : MonoBehaviour
 
         uv = new Vector2(x, y);
         return true;
+    }
+
+    bool IsPointerOverUIExceptDrawing()
+    {
+        if (EventSystem.current == null) return false;
+
+        // PointerEventData 세팅 (마우스/터치 공통)
+        PointerEventData ped = new PointerEventData(EventSystem.current);
+
+        if (Input.touchCount > 0)
+            ped.position = Input.GetTouch(0).position;
+        else
+            ped.position = Input.mousePosition;
+
+        // UI 레이캐스트
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(ped, results);
+
+        if (results.Count == 0) return false;
+
+        // "도화지(drawingView)" 위라면 허용
+        var drawingGO = drawingView != null ? drawingView.gameObject : null;
+
+        foreach (var r in results)
+        {
+            if (r.gameObject == null) continue;
+
+            // 도화지 자신 또는 도화지의 자식(UI 오버레이 등)이면 막지 않음
+            if (drawingGO != null && (r.gameObject == drawingGO || r.gameObject.transform.IsChildOf(drawingGO.transform)))
+                continue;
+
+            // 그 외 UI가 하나라도 걸리면 "막기"
+            return true;
+        }
+
+        return false;
     }
 
     public void Clear()
@@ -176,7 +226,7 @@ public class DrawingCanvas : MonoBehaviour
         switch (currentBrush)
         {
             case BrushType.Pencil:
-                setting = pencilSetting;
+                setting = pencilSetting;               
                 break;
 
             case BrushType.Pen:
@@ -191,6 +241,8 @@ public class DrawingCanvas : MonoBehaviour
                 setting = eraserSetting;
                 break;
         }
+
+        drawingToolButtonImage.sprite = drawingToolsImages[(int)currentBrush];
 
         brushSize = setting.size;
 

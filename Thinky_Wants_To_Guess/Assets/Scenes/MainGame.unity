@@ -5435,13 +5435,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d369c6c67427944acbdb7a665dece8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dataLoader: {fileID: 764873255}
   drawingCanvas: {fileID: 98459252}
-  submitButton: {fileID: 481782238}
-  resizeSize: 256
-  featureThreshold: 60
-  passThreshold: 0.6
   apiKey: 
+  clearScore: 70
 --- !u!4 &1959283321
 Transform:
   m_ObjectHideFlags: 0

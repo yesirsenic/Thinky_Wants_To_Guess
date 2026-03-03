@@ -1,285 +1,177 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
+using System.Collections;
+
+#region Response Classes
+
+[Serializable]
+public class AIResponse
+{
+    public int score;
+    public string comment;
+}
+
+[Serializable]
+public class ChatMessage
+{
+    public string content;
+}
+
+[Serializable]
+public class Choice
+{
+    public ChatMessage message;
+}
+
+[Serializable]
+public class OpenAIResponse
+{
+    public Choice[] choices;
+}
+
+#endregion
 
 public class AIManager : MonoBehaviour
 {
     [Header("References")]
-    public FeatureDataLoader dataLoader;
     public DrawingCanvas drawingCanvas;
 
-    [Header("UI")]
-    public Button submitButton;
-
-    [Header("Settings")]
-    public int resizeSize = 256;
-    public int featureThreshold = 60;   // ⭐ 60 이상이면 true
-    [Range(0f, 1f)]
-    public float passThreshold = 0.6f;  // 전체 통과 기준
-
-    [Header("OpenAI")]
+    [Header("API Settings")]
     public string apiKey;
-    private string apiUrl = "https://api.openai.com/v1/responses";
+    public int clearScore = 70;
 
-    // =========================================================
-    // Submit Entry
-    // =========================================================
+    private bool isProcessing = false;
+
+    // 🔥 버튼에 연결할 함수
     public void Submit()
     {
-        string currentWord = GameManager.Instance.suggestWord;
+        string answer = GameManager.Instance.suggestWord;
 
-        if (!submitButton.interactable)
-            return;
+        if (isProcessing) return;
 
-        submitButton.interactable = false; // 🔒 버튼 잠금
-
-        List<FeatureData> features =
-            dataLoader.GetFeaturesByWord(currentWord);
-
-        if (features == null || features.Count == 0)
+        if (drawingCanvas == null)
         {
-            Debug.LogError("Feature 없음");
-            submitButton.interactable = true; // 실패 시 복구
+            Debug.LogError("DrawingCanvas not assigned!");
             return;
         }
 
-        Texture2D raw = drawingCanvas.GetTexture();
-        Texture2D resized = ResizeTexture(raw, resizeSize);
-
-        string prompt = BuildFeaturePrompt(currentWord, features);
-        string base64 = ConvertToBase64(resized);
-
-        StartCoroutine(SendToVisionAPI(prompt, base64, features));
+        Texture2D texture = drawingCanvas.GetTexture();
+        StartCoroutine(SendToAI(texture, answer));
     }
 
-    // =========================================================
-    // 점수 기반 프롬프트
-    // =========================================================
-    string BuildFeaturePrompt(string word, List<FeatureData> features)
+    IEnumerator SendToAI(Texture2D texture, string answer)
     {
-        StringBuilder sb = new StringBuilder();
+        isProcessing = true;
 
-        sb.AppendLine("You are analyzing a simple drawing.");
-        sb.AppendLine("The drawing is rough and cartoon-like.");
-        sb.AppendLine("For each feature, give a confidence score from 0 to 100.");
-        sb.AppendLine("0 = not visible at all");
-        sb.AppendLine("100 = clearly visible");
-        sb.AppendLine("Do not be overly strict.");
-        sb.AppendLine();
-        sb.AppendLine("Target word: " + word);
-        sb.AppendLine();
-        sb.AppendLine("Features:");
+        byte[] imageBytes = texture.EncodeToPNG();
+        string base64Image = Convert.ToBase64String(imageBytes);
 
-        for (int i = 0; i < features.Count; i++)
-        {
-            sb.AppendLine($"{i + 1}. {features[i].feature}");
-        }
+        string prompt =
+$@"너는 그림 채점 AI다.
 
-        sb.AppendLine();
-        sb.AppendLine("Return ONLY JSON like this:");
-        sb.AppendLine("{");
+제시어: {answer}
 
-        for (int i = 0; i < features.Count; i++)
-        {
-            sb.AppendLine($"  \"{i + 1}\": number{(i < features.Count - 1 ? "," : "")}");
-        }
+1. 제시어와의 유사도를 0~100 사이 정수로 평가하라.
+2. 50자 이내 감상을 작성하라.
 
-        sb.AppendLine("}");
+절대 코드블럭(```)을 사용하지 말 것.
+다른 텍스트를 출력하지 말 것.
+반드시 JSON 객체 하나만 출력할 것.
 
-        return sb.ToString();
-    }
+형식:
+{{
+  ""score"": 0,
+  ""comment"": """"
+}}";
 
-    // =========================================================
-    // API 호출
-    // =========================================================
-    IEnumerator SendToVisionAPI(string prompt, string base64Image, List<FeatureData> features)
-    {
         string jsonBody =
-        $@"
+$@"{{
+  ""model"": ""gpt-4o-mini"",
+  ""messages"": [
     {{
-        ""model"": ""gpt-4o-mini"",
-        ""input"": [
-            {{
-                ""role"": ""user"",
-                ""content"": [
-                    {{
-                        ""type"": ""input_text"",
-                        ""text"": ""{EscapeJson(prompt)}""
-                    }},
-                    {{
-                        ""type"": ""input_image"",
-                        ""image_url"": ""data:image/jpeg;base64,{base64Image}""
-                    }}
-                ]
-            }}
-        ]
-    }}";
+      ""role"": ""user"",
+      ""content"": [
+        {{
+          ""type"": ""text"",
+          ""text"": ""{EscapeJson(prompt)}""
+        }},
+        {{
+          ""type"": ""image_url"",
+          ""image_url"": {{
+            ""url"": ""data:image/png;base64,{base64Image}""
+          }}
+        }}
+      ]
+    }}
+  ],
+  ""max_tokens"": 200
+}}";
 
-        UnityWebRequest request = new UnityWebRequest(apiUrl, "POST");
-
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-
-        request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer " + apiKey);
-
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest request = new UnityWebRequest(
+            "https://api.openai.com/v1/chat/completions",
+            "POST"))
         {
-            Debug.LogError("API Error: " + request.error);
-            Debug.LogError(request.downloadHandler.text);
-        }
-        else
-        {
-            string responseText = request.downloadHandler.text;
+            request.uploadHandler =
+                new UploadHandlerRaw(Encoding.UTF8.GetBytes(jsonBody));
+            request.downloadHandler = new DownloadHandlerBuffer();
 
-            Debug.Log("=== API 응답 원본 ===");
-            Debug.Log(responseText);
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Authorization", "Bearer " + apiKey);
 
-            string extractedJson = ExtractAssistantJson(responseText);
+            yield return request.SendWebRequest();
 
-            if (extractedJson == null)
+            if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("JSON 추출 실패");
+                Debug.LogError("API Error: " + request.error);
+                Debug.LogError(request.downloadHandler.text);
+                isProcessing = false;
                 yield break;
             }
 
-            Debug.Log("=== 추출된 순수 JSON ===");
-            Debug.Log(extractedJson);
+            string response = request.downloadHandler.text;
+            Debug.Log("Raw Response: " + response);
 
-            Dictionary<string, int> scoreDict =
-                ParseScoreResult(extractedJson);
+            OpenAIResponse openAIRes =
+                JsonUtility.FromJson<OpenAIResponse>(response);
 
-            int totalScore = 0;
-            int maxScore = features.Sum(f => f.weight);
-
-            Debug.Log("===== Feature 판정 결과 =====");
-
-            for (int i = 0; i < features.Count; i++)
+            if (openAIRes == null || openAIRes.choices.Length == 0)
             {
-                string key = (i + 1).ToString();
-
-                int confidence = 0;
-                bool isTrue = false;
-
-                if (scoreDict.ContainsKey(key))
-                {
-                    confidence = scoreDict[key];
-                    isTrue = confidence >= featureThreshold;
-                }
-
-                if (isTrue)
-                    totalScore += features[i].weight;
-
-                Debug.Log(
-                    $"Feature {key}: {features[i].feature}\n" +
-                    $"   → Confidence: {confidence}\n" +
-                    $"   → Result: {(isTrue ? "TRUE" : "FALSE")}"
-                );
+                Debug.LogError("Invalid OpenAI response structure");
+                isProcessing = false;
+                yield break;
             }
 
-            Debug.Log($"===== 최종 점수: {totalScore} / {maxScore} =====");
+            string content =
+                openAIRes.choices[0].message.content;
 
-            if (totalScore >= maxScore * passThreshold)
-                Debug.Log("🎯 통과!");
+            content = content.Replace("```json", "")
+                             .Replace("```", "")
+                             .Trim();
+
+            AIResponse result =
+                JsonUtility.FromJson<AIResponse>(content);
+
+            if (result == null)
+            {
+                Debug.LogError("AIResponse parsing failed");
+                isProcessing = false;
+                yield break;
+            }
+
+            Debug.Log("Score: " + result.score);
+            Debug.Log("Comment: " + result.comment);
+
+            if (result.score >= clearScore)
+                GameClear(result.score, result.comment);
             else
-                Debug.Log("❌ 실패");
+                GameFail(result.score, result.comment);
+
+            isProcessing = false;
         }
     }
 
-    // =========================================================
-    // JSON 추출
-    // =========================================================
-    string ExtractAssistantJson(string fullResponse)
-    {
-        try
-        {
-            var wrapper = JsonUtility.FromJson<ResponseWrapper>(fullResponse);
-            string text = wrapper.output[0].content[0].text;
-
-            text = text.Replace("```json", "")
-                       .Replace("```", "")
-                       .Trim();
-
-            return text;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    // =========================================================
-    // 점수 JSON 파싱
-    // =========================================================
-    Dictionary<string, int> ParseScoreResult(string json)
-    {
-        Dictionary<string, int> result = new Dictionary<string, int>();
-
-        json = json.Replace("{", "")
-                   .Replace("}", "")
-                   .Replace("\"", "");
-
-        string[] pairs = json.Split(',');
-
-        foreach (string pair in pairs)
-        {
-            string[] keyValue = pair.Split(':');
-
-            if (keyValue.Length == 2)
-            {
-                string key = keyValue[0].Trim();
-                int value;
-
-                if (int.TryParse(keyValue[1].Trim(), out value))
-                {
-                    result[key] = value;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    // =========================================================
-    // Resize
-    // =========================================================
-    Texture2D ResizeTexture(Texture2D source, int size)
-    {
-        RenderTexture rt = RenderTexture.GetTemporary(size, size);
-        Graphics.Blit(source, rt);
-
-        RenderTexture prev = RenderTexture.active;
-        RenderTexture.active = rt;
-
-        Texture2D result = new Texture2D(size, size);
-        result.ReadPixels(new Rect(0, 0, size, size), 0, 0);
-        result.Apply();
-
-        RenderTexture.active = prev;
-        RenderTexture.ReleaseTemporary(rt);
-
-        return result;
-    }
-
-    // =========================================================
-    // Base64
-    // =========================================================
-    string ConvertToBase64(Texture2D tex)
-    {
-        byte[] jpg = tex.EncodeToJPG(70);
-        return System.Convert.ToBase64String(jpg);
-    }
-
-    // =========================================================
-    // Escape
-    // =========================================================
     string EscapeJson(string str)
     {
         return str.Replace("\\", "\\\\")
@@ -287,25 +179,16 @@ public class AIManager : MonoBehaviour
                   .Replace("\n", "\\n")
                   .Replace("\r", "");
     }
-}
 
-// ==========================
-// 응답 구조용 클래스
-// ==========================
-[System.Serializable]
-public class ResponseWrapper
-{
-    public OutputItem[] output;
-}
+    void GameClear(int score, string comment)
+    {
+        Debug.Log("CLEAR! Score: " + score);
+        Debug.Log("Comment: " + comment);
+    }
 
-[System.Serializable]
-public class OutputItem
-{
-    public ContentItem[] content;
-}
-
-[System.Serializable]
-public class ContentItem
-{
-    public string text;
+    void GameFail(int score, string comment)
+    {
+        Debug.Log("FAIL! Score: " + score);
+        Debug.Log("Comment: " + comment);
+    }
 }

@@ -23,6 +23,9 @@ Shader "Custom/BrushShader"
 
             sampler2D _MainTex;
             sampler2D _BrushTex;
+
+            float4 _MainTex_TexelSize;
+
             float4 _Color;
             float2 _Coordinate;
             float _Size;
@@ -31,21 +34,29 @@ Shader "Custom/BrushShader"
             {
                 float2 uv = i.uv;
 
-                // 기존 캔버스 색
-                fixed4 baseCol = tex2D(_MainTex, uv);
+                float2 texel = float2(_MainTex_TexelSize.x, _MainTex_TexelSize.y);
+                float2 pixelUV = floor(uv / texel) * texel + texel * 0.5;
+
+                fixed4 baseCol = tex2D(_MainTex, pixelUV);
 
                 float2 diff = uv - _Coordinate;
-                float dist = length(diff);
+                float dist2 = dot(diff, diff);
 
-                if (dist > _Size)
-                    return baseCol;
+                if (dist2 <= (_Size * _Size))
+                {
+                    float2 brushUV = diff / (_Size * 2) + 0.5;
+                    brushUV = saturate(brushUV);
 
-                float2 brushUV = diff / (_Size * 2) + 0.5;
-                fixed4 brush = tex2D(_BrushTex, brushUV);
+                    fixed4 brush = tex2D(_BrushTex, brushUV);
 
-                fixed4 paint = brush * _Color;
+                    brush.a = step(0.5, brush.a);
 
-                return lerp(baseCol, paint, brush.a);
+                    fixed4 paint = brush * _Color;
+
+                    baseCol = lerp(baseCol, paint, brush.a);
+                }
+
+                return baseCol;
             }
             ENDCG
         }

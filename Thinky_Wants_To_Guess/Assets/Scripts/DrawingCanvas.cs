@@ -18,6 +18,7 @@ public class DrawingCanvas : MonoBehaviour
     public BrushSetting eraserSetting;
 
     private RenderTexture drawingRT;
+    private RenderTexture tempRT;
     private Vector2? lastUV = null;
 
     [SerializeField]
@@ -26,22 +27,61 @@ public class DrawingCanvas : MonoBehaviour
     [SerializeField]
     private Image drawingToolButtonImage;
 
+    [SerializeField]
+    private Slider eraserSizeSlider;
+
+    [SerializeField]
+    private RectTransform eraserPreview;
+
     void Start()
     {
         
-        drawingRT = new RenderTexture(1400, 600, 0);
+
+
+        drawingRT = new RenderTexture(
+                                        1400,
+                                        600,
+                                        0,
+                                        RenderTextureFormat.ARGB32
+                                     );
+
+        drawingRT.filterMode = FilterMode.Point;
+        drawingRT.wrapMode = TextureWrapMode.Clamp;
         drawingRT.Create();
+
+        tempRT = new RenderTexture(
+        drawingRT.width,
+        drawingRT.height,
+        0,
+        RenderTextureFormat.ARGB32
+        );
+
+        tempRT.filterMode = FilterMode.Point;
+        tempRT.wrapMode = TextureWrapMode.Clamp;
+
+        tempRT.Create();
+
+
 
         drawingView.texture = drawingRT;
         Clear();
 
         brushColor = Color.black;
         brushMaterial.SetColor("_Color", brushColor);
+
+        if (eraserSizeSlider != null)
+        {
+            eraserSizeSlider.onValueChanged.AddListener(SetEraserSize);
+            eraserSizeSlider.value = eraserSetting.size;
+        }
+
         SetBrushPencil();
     }
 
     void Update()
     {
+        UpdateEraserPreview();
+
         if (IsPointerOverUIExceptDrawing())
         {
             lastUV = null;
@@ -135,6 +175,34 @@ public class DrawingCanvas : MonoBehaviour
         return false;
     }
 
+    void UpdateEraserPreview()
+    {
+        if (eraserPreview == null) return;
+
+        if (currentBrush != BrushType.Eraser)
+        {
+            eraserPreview.gameObject.SetActive(false);
+            return;
+        }
+
+        eraserPreview.gameObject.SetActive(true);
+
+        Vector2 localPoint;
+        RectTransform rect = drawingView.rectTransform;
+
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            rect,
+            Input.mousePosition,
+            null,
+            out localPoint))
+        {
+            eraserPreview.localPosition = localPoint;
+
+            float size = brushSize;
+            eraserPreview.sizeDelta = new Vector2(size, size);
+        }
+    }
+
     public void Clear()
     {
         var prev = RenderTexture.active;
@@ -163,7 +231,22 @@ public class DrawingCanvas : MonoBehaviour
     public void SetBrushEraser()
     {
         currentBrush = BrushType.Eraser;
-        brushSize = eraserSetting.size;
+
+        brushSize = eraserSizeSlider.value;
+
+        eraserSetting.size = brushSize;
+
+        Debug.Log(brushSize);
+    }
+
+    public void SetEraserSize(float value)
+    {
+        if (currentBrush == BrushType.Eraser)
+        {
+            brushSize = value;
+        }
+
+        eraserSetting.size = value;
     }
 
     public void SetBrushColor(Color color)
@@ -188,7 +271,14 @@ public class DrawingCanvas : MonoBehaviour
     void DrawLine(Vector2 from, Vector2 to)
     {
         float distance = Vector2.Distance(from, to);
+
         int steps = Mathf.CeilToInt(distance / (brushSize * 0.5f));
+
+        if (steps <= 0)
+        {
+            Draw(to);
+            return;
+        }
 
         for (int i = 0; i <= steps; i++)
         {
@@ -200,6 +290,9 @@ public class DrawingCanvas : MonoBehaviour
 
     void Draw(Vector2 uv)
     {
+        if (float.IsNaN(uv.x) || float.IsNaN(uv.y))
+            return;
+
         float sizeUV = brushSize / drawingRT.width;
 
         brushMaterial.SetVector("_Coordinate", uv);
@@ -211,12 +304,8 @@ public class DrawingCanvas : MonoBehaviour
 
         brushMaterial.SetColor("_Color", finalColor);
 
-        RenderTexture temp = RenderTexture.GetTemporary(drawingRT.width, drawingRT.height);
-
-        Graphics.Blit(drawingRT, temp);
-        Graphics.Blit(temp, drawingRT, brushMaterial);
-
-        RenderTexture.ReleaseTemporary(temp);
+        Graphics.Blit(drawingRT, tempRT);
+        Graphics.Blit(tempRT, drawingRT, brushMaterial);
     }
 
     void ApplyBrushSettings()

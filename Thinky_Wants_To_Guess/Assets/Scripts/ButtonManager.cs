@@ -30,4 +30,9 @@ public class ButtonManager : MonoBehaviour
         SceneManager.LoadScene("MainGame");
     }
 
+    public void LoadOtherScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
 }

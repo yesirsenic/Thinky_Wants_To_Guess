@@ -33,4 +33,15 @@ public class LocalizedText : MonoBehaviour
 
         text.text = LocalizationManager.Instance.GetText(key);
     }
+
+    public void UpdateTextPublic()
+    {
+        if (LocalizationManager.Instance == null)
+        {
+            Debug.LogWarning("LocalizationManager not found");
+            return;
+        }
+
+        text.text = LocalizationManager.Instance.GetText(key);
+    }
 }

@@ -84,6 +84,6 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 1}
-    - _Coordinate: {r: 0.6310707, g: 0.39419448, b: 0, a: 0}
+    - _Coordinate: {r: 0.4808204, g: 0.60896665, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

@@ -70,21 +70,44 @@ public class AIManager : MonoBehaviour
         string base64Image = Convert.ToBase64String(imageBytes);
 
         string prompt =
-$@"너는 그림 채점 AI다.
+$@"너는 그림을 보고 무엇인지 추측하는 AI다.
 
-제시어: {answer}
+참고 단어: {answer}
 
-1. 제시어와의 유사도를 0~100 사이 정수로 평가하라.
-2. 50자 이내 감상을 작성하라.
+규칙:
 
-절대 코드블럭(```)을 사용하지 말 것.
-다른 텍스트를 출력하지 말 것.
-반드시 JSON 객체 하나만 출력할 것.
+1. 그림의 특징을 먼저 설명하라.
+2. 그 다음 무엇처럼 보이는지 추측하라.
+
+comment는 반드시 아래 구조를 정확히 따라야 한다.
+
+[특징 설명]. 그래서 [사물 이름]처럼 보인다.
+
+예:
+둥근 모양에 위쪽에 선이 있어서 사과처럼 보인다.
+
+3. 특징 설명에는 최소 두 가지 특징을 포함하라.
+4. comment는 반드시 20자 이상 작성하라.
+
+5. score가 70 이상이면 반드시 참고 단어를 사용하라.
+6. score가 70 미만이면 참고 단어를 절대 사용하지 마라.
+
+7. 반드시 마지막에 사물 이름 하나를 말해야 한다.
+8. 설명만 하고 끝내면 안 된다.
+9. 여러 후보를 말하지 말고 하나만 말하라.
+10. comment의 마지막 문장은 반드시 ""[사물 이름]처럼 보인다"" 형태여야 한다.
+11. comment는 반드시 한 문장만 작성하라.
+
+출력 규칙:
+
+JSON 하나만 출력
+다른 텍스트 금지
 
 형식:
+
 {{
-  ""score"": 0,
-  ""comment"": """"
+ ""score"": 0,
+ ""comment"": """"
 }}";
 
         string jsonBody =
@@ -170,6 +193,8 @@ $@"{{
                 GameFail(result.score, result.comment);
 
             isProcessing = false;
+
+            MainGameManager.Instance.ResponseExplanation(result.comment);
         }
     }
 

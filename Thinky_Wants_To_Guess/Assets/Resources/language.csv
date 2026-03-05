@@ -6,4 +6,5 @@ TEXT_LANGUAGE,언어,Language,语言,言語,Sprache,Idioma,Язык
 TEXT_DISPLAYMODE,화면 모드,Display Mode,显示模式,画面モード,Anzeigemodus,Modo de Exibição,Режим экрана
 CLEAR_CANVAS_TEXT,캔버스를 지울까요?,Clear the canvas?,要清除画布吗?,キャンバスを消去しますか?,Leinwand löschen?,Limpar a tela?,Очистить холст?
 Text_SUGGEST,제시어,Given,给定词,お題,Vorgabe,Fornecida,Дано
+Text_WAITING,기다리는 중,Waiting,等待中,待機中,Warten,Aguardando,Ожидание
 Suggest_Apple,사과,Apple,苹果,りんご,Apfel,Maçã,Яблоко

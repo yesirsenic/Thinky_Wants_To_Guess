@@ -226,12 +226,14 @@ $@"{{
 
     void GameClear(int score, string comment)
     {
+        MainGameManager.Instance.isClear = true;
         Debug.Log("CLEAR! Score: " + score);
         Debug.Log("Comment: " + comment);
     }
 
     void GameFail(int score, string comment)
     {
+        MainGameManager.Instance.isClear = false;
         Debug.Log("FAIL! Score: " + score);
         Debug.Log("Comment: " + comment);
     }

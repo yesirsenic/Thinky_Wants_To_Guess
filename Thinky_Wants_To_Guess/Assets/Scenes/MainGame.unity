@@ -3019,13 +3019,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6134c83e1a557ff448c84fc58d63895f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isClear: 0
   suggestWord: {fileID: 1238440326}
+  drawingCanvas: {fileID: 98459252}
   character_Sprite: {fileID: 648158856}
   ai_Text: {fileID: 191072372}
   CharacterSprites:
   - {fileID: 21300000, guid: dc1c9aefadddc994d8d7c1677dac31fe, type: 3}
   - {fileID: 21300000, guid: 01c6084a3391a7841b66a2bd071ea3ce, type: 3}
   - {fileID: 21300000, guid: b2a69a216dadb2b45ad86c78745ecaf8, type: 3}
+  gameEndPanel: {fileID: 859223230}
+  black_Paenl: {fileID: 1928260394}
+  drawing: {fileID: 299030862}
+  ai_Text_EndPaenl: {fileID: 1121579768}
+  gameEndCollection:
+  - {fileID: 1868267212}
+  - {fileID: 417382054}
 --- !u!1 &917571669
 GameObject:
   m_ObjectHideFlags: 0
@@ -7650,7 +7659,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1868267213
 RectTransform:
   m_ObjectHideFlags: 0

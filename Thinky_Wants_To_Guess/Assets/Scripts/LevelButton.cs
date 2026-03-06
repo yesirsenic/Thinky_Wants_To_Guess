@@ -8,6 +8,7 @@ public class LevelButton : MonoBehaviour
     public int levelNum;
     public string suggestWord;
     public string suggestKey;
+    public string category;
     public bool isClear;
 
     [SerializeField]

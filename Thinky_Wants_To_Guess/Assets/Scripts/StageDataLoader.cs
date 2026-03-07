@@ -31,10 +31,11 @@ public class StageDataLoader : MonoBehaviour
 
             StageData data = new StageData();
             data.Stage_Num = int.Parse(values[0]);
-            data.IsClear = bool.Parse(values[1]);
 
             stageDataList.Add(data);
         }
+
+        GameManager.Instance.stageDataList.AddRange(stageDataList);
     }
 
     void SetupStage()

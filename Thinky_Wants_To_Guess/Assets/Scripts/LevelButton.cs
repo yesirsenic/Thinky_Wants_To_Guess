@@ -9,7 +9,6 @@ public class LevelButton : MonoBehaviour
     public string suggestWord;
     public string suggestKey;
     public string category;
-    public bool isClear;
 
     [SerializeField]
     Text suggestText;
@@ -21,20 +20,18 @@ public class LevelButton : MonoBehaviour
     {
         levelNum = data.Level_Num;
         suggestWord = data.Suggest_Word;
-        isClear = data.IsClear;
         suggestKey = data.Key_Suggest;
 
         suggestText.gameObject.GetComponent<LocalizedSuggestWord>().SetWord(suggestKey);
-        
 
-        if(!isClear)
+        if (GameManager.Instance.stageNum == PlayerPrefs.GetInt("MaxStage") && levelNum > PlayerPrefs.GetInt("MaxLevel"))
         {
-            if(blackPanel != null)
+
+            if (blackPanel != null)
             {
                 blackPanel.SetActive(true);
                 gameObject.GetComponent<Button>().interactable = false;
             }
-
         }
     }
 
@@ -42,5 +39,6 @@ public class LevelButton : MonoBehaviour
     {
         GameManager.Instance.suggestWord = suggestWord;
         GameManager.Instance.suggestKey = suggestKey;
+        GameManager.Instance.stageLevelNum = levelNum;
     }
 }

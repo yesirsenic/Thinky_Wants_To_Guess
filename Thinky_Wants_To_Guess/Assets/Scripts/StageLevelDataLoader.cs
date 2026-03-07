@@ -33,10 +33,11 @@ public class StageLevelDataLoader : MonoBehaviour
             data.Level_Num = int.Parse(values[1]);
             data.Suggest_Word = values[2];
             data.Key_Suggest = values[3];
-            data.IsClear = bool.Parse(values[4]);
 
             stageDataList.Add(data);
         }
+
+        GameManager.Instance.stageLevelDataList.AddRange(stageDataList);
     }
 
     List<StageLevelData> GetStageLevels(int stageNum)

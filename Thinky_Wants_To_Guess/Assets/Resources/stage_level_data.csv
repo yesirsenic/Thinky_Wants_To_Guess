@@ -1,6 +1,6 @@
 ﻿Stage_Num,Level_Num,Suggest_Word,Key,IsClear
 1,1,사과,Suggest_Apple,FALSE
-1,2,A,Suggest_Apple,FALSE
+1,2,바나나,Suggest_Banana,FALSE
 1,3,A,Suggest_Apple,FALSE
 1,4,A,Suggest_Apple,FALSE
 1,5,A,Suggest_Apple,FALSE

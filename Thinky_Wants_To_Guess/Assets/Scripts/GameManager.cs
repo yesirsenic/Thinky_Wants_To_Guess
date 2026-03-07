@@ -10,9 +10,18 @@ public class GameManager : MonoBehaviour
 
     public int stageNum { get; set; }
 
+    public int stageLevelNum { get; set; }
+
     public string suggestWord { get; set; }
 
     public string suggestKey { get; set; }
+
+
+    public List<StageData> stageDataList { get; set; } = new List<StageData>();
+
+    public List<StageLevelData> stageLevelDataList { get; set; } = new List<StageLevelData>();
+
+    public int maxLevelStage = 20;
 
 
 
@@ -27,5 +36,23 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        __Init__();
+    }
+
+    private void __Init__()
+    {
+
+        if (PlayerPrefs.GetInt("MaxStage") == 0)
+        {
+            PlayerPrefs.SetInt("MaxStage", 1);
+        }
+
+        if(PlayerPrefs.GetInt("MaxLevel") == 0)
+        {
+            PlayerPrefs.SetInt("MaxLevel", 1);
+        }
+
+
     }
 }

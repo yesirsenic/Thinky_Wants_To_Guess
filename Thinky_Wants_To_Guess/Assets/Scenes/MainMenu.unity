@@ -2896,7 +2896,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1328514889}
         m_TargetAssemblyTypeName: LanguageDropdown, Assembly-CSharp
         m_MethodName: OnLanguageChanged
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

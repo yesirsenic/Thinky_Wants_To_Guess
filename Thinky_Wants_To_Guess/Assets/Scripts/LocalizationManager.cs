@@ -91,4 +91,20 @@ public class LocalizationManager : MonoBehaviour
         LoadLocalization();
         OnLanguageChanged?.Invoke();
     }
+
+    public string GetLanguageName(Language lang)
+    {
+        switch (lang)
+        {
+            case Language.Korean: return "Korean";
+            case Language.English: return "English";
+            case Language.Chinese: return "Chinese";
+            case Language.Japanese: return "Japanese";
+            case Language.German: return "German";
+            case Language.PortugueseBR: return "Brazilian Portuguese";
+            case Language.Russian: return "Russian";
+        }
+
+        return "Korean";
+    }
 }

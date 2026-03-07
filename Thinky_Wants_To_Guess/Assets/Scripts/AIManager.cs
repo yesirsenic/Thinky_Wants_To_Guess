@@ -48,6 +48,7 @@ public class AIManager : MonoBehaviour
     public void Submit()
     {
         string answer = GameManager.Instance.suggestWord;
+        string lang = LocalizationManager.Instance.GetLanguageName(LocalizationManager.Instance.currentLanguage);
 
         if (isProcessing) return;
 
@@ -59,10 +60,10 @@ public class AIManager : MonoBehaviour
 
         Texture2D texture = drawingCanvas.GetTexture();
         Texture2D resized = ResizeTexture(texture, 700, 300);
-        StartCoroutine(SendToAI(resized, answer));
+        StartCoroutine(SendToAI(resized, answer, lang));
     }
 
-    IEnumerator SendToAI(Texture2D texture, string answer)
+    IEnumerator SendToAI(Texture2D texture, string answer, string lang)
     {
         isProcessing = true;
 
@@ -70,14 +71,30 @@ public class AIManager : MonoBehaviour
         string base64Image = Convert.ToBase64String(imageBytes);
 
         string prompt =
-        $@"너는 그림을 보고 무엇인지 추측하는 AI다.
+$@"너는 그림을 보고 무엇인지 추측하는 AI다.
 
 참고 단어: {answer}
 
+출력 언어: {lang}
+
 규칙:
 
-1. 그림의 특징을 먼저 설명하라.
-2. 그 다음 무엇처럼 보이는지 추측하라.
+1. comment는 반드시 {lang} 언어로 작성하라.
+2. 사물 이름도 반드시 {lang} 언어로 작성하라.
+3. 다른 언어를 섞지 마라.
+
+4. 먼저 그림과 참고 단어의 유사도를 판단하여 score를 결정하라.
+5. score를 결정한 후 score 규칙에 맞게 comment를 작성하라.
+
+6. score가 70 이상이면 comment의 사물 이름은 반드시 참고 단어와 동일해야 한다.
+7. score가 70 미만이면 comment에서 참고 단어를 절대 사용하지 마라.
+
+8. score는 반드시 comment의 사물 이름을 기준으로 결정해야 한다.
+9. comment의 사물 이름이 참고 단어와 같으면 score는 반드시 70 이상이어야 한다.
+10. comment의 사물 이름이 참고 단어와 다르면 score는 반드시 70 미만이어야 한다.
+
+11. 그림의 특징을 먼저 설명하라.
+12. 그 다음 무엇처럼 보이는지 추측하라.
 
 comment는 반드시 아래 구조를 정확히 따라야 한다.
 
@@ -86,26 +103,23 @@ comment는 반드시 아래 구조를 정확히 따라야 한다.
 예:
 둥근 모양에 위쪽에 선이 있어서 사과처럼 보인다.
 
-3. 특징 설명에는 최소 두 가지 특징을 포함하라.
-4. comment는 반드시 20자 이상 작성하라.
+13. 특징 설명에는 최소 두 가지 특징을 포함하라.
+14. comment는 반드시 20자 이상 작성하라.
 
-5. score가 70 이상이면 반드시 참고 단어를 사용하라.
-6. score가 70 미만이면 참고 단어를 절대 사용하지 마라.
+15. 반드시 마지막에 사물 이름 하나를 말해야 한다.
+16. 설명만 하고 끝내면 안 된다.
+17. 여러 후보를 말하지 말고 하나만 말하라.
+18. comment의 마지막 문장은 반드시 ""[사물 이름]처럼 보인다"" 형태여야 한다.
+19. comment는 반드시 한 문장만 작성하라.
 
-7. 반드시 마지막에 사물 이름 하나를 말해야 한다.
-8. 설명만 하고 끝내면 안 된다.
-9. 여러 후보를 말하지 말고 하나만 말하라.
-10. comment의 마지막 문장은 반드시 ""[사물 이름]처럼 보인다"" 형태여야 한다.
-11. comment는 반드시 한 문장만 작성하라.
+20. 사물 이름은 반드시 구체적인 명사여야 한다.
+21. ""물건"", ""무언가"", ""사물"", ""음식"", ""과일"", ""채소"", ""생물"" 같은
+추상적인 단어는 절대 사용하지 마라.
 
-12. 사물 이름은 반드시 구체적인 명사여야 한다.
-13. ""물건"", ""무언가"", ""사물"", ""음식"", ""과일"", ""채소"", ""생물"" 같은
-    추상적인 단어는 절대 사용하지 마라.
+22. 반드시 사람들이 일반적으로 사용하는 사물 이름을 사용하라.
+23. ""무언가처럼 보인다"", ""어떤 것처럼 보인다"" 같은 표현은 절대 사용하지 마라.
 
-14. 반드시 사람들이 일반적으로 사용하는 사물 이름을 사용하라.
-15. ""무언가처럼 보인다"", ""어떤 것처럼 보인다"" 같은 표현은 절대 사용하지 마라.
-
-16. 그림이 부정확하더라도 가장 비슷한 사물 하나를 반드시 선택하라.
+24. 그림이 부정확하더라도 가장 비슷한 사물 하나를 반드시 선택하라.
 
 출력 규칙:
 

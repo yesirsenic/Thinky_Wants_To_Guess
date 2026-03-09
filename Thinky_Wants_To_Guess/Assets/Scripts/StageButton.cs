@@ -11,6 +11,7 @@ public class StageButton : MonoBehaviour
     {
         stageNum = data.Stage_Num;
 
+
         if (stageNum > PlayerPrefs.GetInt("MaxStage"))
         {
             if (transform.childCount != 0)
@@ -18,6 +19,15 @@ public class StageButton : MonoBehaviour
                 transform.GetChild(0).gameObject.SetActive(true);
                 gameObject.GetComponent<Button>().interactable = false;
             }
+
+        }
+
+
+        //데모를 위한 스테이지 락
+        if (stageNum == 2)
+        {
+            transform.GetChild(0).gameObject.SetActive(true);
+            gameObject.GetComponent<Button>().interactable = false;
         }
     }
 }

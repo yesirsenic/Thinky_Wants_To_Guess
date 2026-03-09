@@ -43,7 +43,6 @@ public class GameManager : MonoBehaviour
     private void __Init__()
     {
 
-
         if (PlayerPrefs.GetInt("MaxStage") == 0)
         {
             PlayerPrefs.SetInt("MaxStage", 1);

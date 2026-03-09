@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     public List<StageLevelData> stageLevelDataList { get; set; } = new List<StageLevelData>();
 
-    public int maxLevelStage = 20;
+    public int maxLevelStage = 15;
 
 
 

@@ -131,7 +131,7 @@ public class MainGameManager : MonoBehaviour
         }
 
         //20스테이지의 경우
-        if(GameManager.Instance.stageNum == 20)
+        if(GameManager.Instance.stageNum == 15)
         {
             GameEndNextButton.SetActive(false);
         }

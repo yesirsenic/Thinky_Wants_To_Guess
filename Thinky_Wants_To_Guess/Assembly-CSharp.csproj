@@ -62,10 +62,12 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\LocalizationManager.cs" />
     <Compile Include="Assets\Scripts\BrushSetting.cs" />
+    <Compile Include="Assets\Scripts\PauseManager.cs" />
     <Compile Include="Assets\Scripts\MainGameManager.cs" />
     <Compile Include="Assets\Scripts\LevelButton.cs" />
     <Compile Include="Assets\Scripts\FeatureDataLoader.cs" />
     <Compile Include="Assets\Scripts\AIManager.cs" />
+    <Compile Include="Assets\Scripts\PausePopupUI.cs" />
     <Compile Include="Assets\Scripts\DrawingCanvas.cs" />
     <Compile Include="Assets\Scripts\StageLevelData.cs" />
     <Compile Include="Assets\Scripts\ButtonManager.cs" />

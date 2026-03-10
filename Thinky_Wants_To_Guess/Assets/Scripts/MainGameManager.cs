@@ -103,6 +103,7 @@ public class MainGameManager : MonoBehaviour
 
         if(isClear)
         {
+            SFXManager.Instance.Play(SFXManager.SFXType.StageClear);
             gameEndCollection[0].SetActive(true);
             LevelClear();
 
@@ -110,6 +111,7 @@ public class MainGameManager : MonoBehaviour
 
         else
         {
+            SFXManager.Instance.Play(SFXManager.SFXType.StageFail);
             gameEndCollection[1].SetActive(true);
         }
     }
@@ -180,6 +182,8 @@ public class MainGameManager : MonoBehaviour
         character_Sprite.sprite = CharacterSprites[1];
 
         state = GameState.Check;
+
+        SFXManager.Instance.Play(SFXManager.SFXType.Hmm);
     }
 
     public void ResponseExplanation(string comment)
@@ -191,6 +195,8 @@ public class MainGameManager : MonoBehaviour
         character_Sprite.sprite = CharacterSprites[2];
 
         state = GameState.Explanation;
+
+        SFXManager.Instance.Play(SFXManager.SFXType.Aha);
 
         StartCoroutine(StageEndStart());
     }
@@ -215,7 +221,7 @@ public class MainGameManager : MonoBehaviour
 
     public void ToLevelSelectScene()
     {
-        SceneManager.LoadScene("LevelSelct");
+        SceneManager.LoadScene("LevelSelect");
     }
 
     

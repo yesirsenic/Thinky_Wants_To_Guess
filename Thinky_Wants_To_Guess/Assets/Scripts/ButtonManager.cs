@@ -22,7 +22,7 @@ public class ButtonManager : MonoBehaviour
         GameManager.Instance.stageNum = num;
 
 
-        SceneManager.LoadScene("LevelSelct");
+        SceneManager.LoadScene("LevelSelect");
     }
 
     public void ToMainGame()
@@ -33,6 +33,12 @@ public class ButtonManager : MonoBehaviour
     public void LoadOtherScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
+    }
+
+    //¼Ò¸®
+    public void ButtonSound()
+    {
+        SFXManager.Instance.Play(SFXManager.SFXType.ButtonClick);
     }
 
 }

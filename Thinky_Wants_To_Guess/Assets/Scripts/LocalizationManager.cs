@@ -18,6 +18,10 @@ public class LocalizationManager : MonoBehaviour
         Russian
     }
 
+    public Font fontKR;
+    public Font fontJP;
+    public Font fontSC;
+
     public Language currentLanguage = Language.Korean;
 
     public static event Action OnLanguageChanged;
@@ -106,5 +110,20 @@ public class LocalizationManager : MonoBehaviour
         }
 
         return "Korean";
+    }
+
+    public Font GetCurrentFont()
+    {
+        switch (currentLanguage)
+        {
+            case Language.Japanese:
+                return fontJP;
+
+            case Language.Chinese:
+                return fontSC;
+
+            default:
+                return fontKR;
+        }
     }
 }

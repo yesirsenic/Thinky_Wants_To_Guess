@@ -2138,6 +2138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a4791317814c9b43b7a2fd1d938318f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fontKR: {fileID: 12800000, guid: b5161579ad2ef814f80bb6b117cffecc, type: 3}
+  fontJP: {fileID: 12800000, guid: 43314197e2c26534986dae77254e2579, type: 3}
+  fontSC: {fileID: 12800000, guid: 34bb12b0d476ade4f893af41d73536d4, type: 3}
   currentLanguage: 1
 --- !u!4 &1063944607
 Transform:

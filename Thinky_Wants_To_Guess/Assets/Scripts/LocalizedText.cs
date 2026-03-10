@@ -32,6 +32,8 @@ public class LocalizedText : MonoBehaviour
         }
 
         text.text = LocalizationManager.Instance.GetText(key);
+
+        text.font = LocalizationManager.Instance.GetCurrentFont();
     }
 
     public void UpdateTextPublic()
@@ -43,5 +45,7 @@ public class LocalizedText : MonoBehaviour
         }
 
         text.text = LocalizationManager.Instance.GetText(key);
+
+        text.font = LocalizationManager.Instance.GetCurrentFont();
     }
 }

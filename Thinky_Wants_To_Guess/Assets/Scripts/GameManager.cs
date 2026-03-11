@@ -40,6 +40,12 @@ public class GameManager : MonoBehaviour
         __Init__();
     }
 
+    private void Start()
+    {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 120;
+    }
+
     private void __Init__()
     {
 

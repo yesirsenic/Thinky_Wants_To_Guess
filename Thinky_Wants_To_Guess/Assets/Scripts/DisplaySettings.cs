@@ -11,6 +11,7 @@ public class DisplaySettings : MonoBehaviour
             case 0:
                 Debug.Log("Ã¢¸ðµå!");
                 Screen.fullScreenMode = FullScreenMode.Windowed;
+                Screen.SetResolution(1280, 720, false);
                 break;
 
             case 1:

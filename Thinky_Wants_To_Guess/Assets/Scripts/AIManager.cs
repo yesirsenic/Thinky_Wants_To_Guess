@@ -39,7 +39,6 @@ public class AIManager : MonoBehaviour
     public DrawingCanvas drawingCanvas;
 
     [Header("API Settings")]
-    public string apiKey;
     public int clearScore = 70;
 
     private bool isProcessing = false;
@@ -159,7 +158,7 @@ $@"{{
 }}";
 
         using (UnityWebRequest request = new UnityWebRequest(
-            "https://api.openai.com/v1/chat/completions",
+            "https://project-nnaxx.vercel.app/api/openai",
             "POST"))
         {
             request.uploadHandler =
@@ -167,7 +166,6 @@ $@"{{
             request.downloadHandler = new DownloadHandlerBuffer();
 
             request.SetRequestHeader("Content-Type", "application/json");
-            request.SetRequestHeader("Authorization", "Bearer " + apiKey);
 
             yield return request.SendWebRequest();
 

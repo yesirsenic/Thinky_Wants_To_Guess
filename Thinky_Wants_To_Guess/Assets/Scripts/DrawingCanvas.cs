@@ -47,6 +47,8 @@ public class DrawingCanvas : MonoBehaviour
 
         drawingRT.filterMode = FilterMode.Point;
         drawingRT.wrapMode = TextureWrapMode.Clamp;
+        drawingRT.useMipMap = false;
+        drawingRT.autoGenerateMips = false;
         drawingRT.Create();
 
         tempRT = new RenderTexture(
@@ -58,6 +60,8 @@ public class DrawingCanvas : MonoBehaviour
 
         tempRT.filterMode = FilterMode.Point;
         tempRT.wrapMode = TextureWrapMode.Clamp;
+        tempRT.useMipMap = false;
+        tempRT.autoGenerateMips = false;
 
         tempRT.Create();
 
@@ -272,7 +276,7 @@ public class DrawingCanvas : MonoBehaviour
     {
         float distance = Vector2.Distance(from, to);
 
-        int steps = Mathf.CeilToInt(distance / (brushSize * 0.5f));
+        int steps = Mathf.Max(1, Mathf.CeilToInt(distance * 200f));
 
         if (steps <= 0)
         {
@@ -293,7 +297,7 @@ public class DrawingCanvas : MonoBehaviour
         if (float.IsNaN(uv.x) || float.IsNaN(uv.y))
             return;
 
-        float sizeUV = brushSize / drawingRT.width;
+        float sizeUV = brushSize / Mathf.Min(drawingRT.width, drawingRT.height);
 
         brushMaterial.SetVector("_Coordinate", uv);
         brushMaterial.SetFloat("_Size", sizeUV);

@@ -23,11 +23,15 @@ public class StageButton : MonoBehaviour
         }
 
 
-        //데모를 위한 스테이지 락
-        if (stageNum == 2)
+        if(GameManager.Instance.is_Demo)
         {
-            transform.GetChild(0).gameObject.SetActive(true);
-            gameObject.GetComponent<Button>().interactable = false;
+            //데모를 위한 스테이지 락
+            if (stageNum == 2)
+            {
+                transform.GetChild(0).gameObject.SetActive(true);
+                gameObject.GetComponent<Button>().interactable = false;
+            }
         }
+        
     }
 }

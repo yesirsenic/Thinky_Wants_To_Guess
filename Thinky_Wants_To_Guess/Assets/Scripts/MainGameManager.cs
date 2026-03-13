@@ -205,6 +205,8 @@ public class MainGameManager : MonoBehaviour
     {
         StageLevelData leveldata = GameManager.Instance.stageLevelDataList[GameManager.Instance.stageLevelNum];
 
+        Debug.Log(GameManager.Instance.stageLevelNum);
+
         GameManager.Instance.stageLevelNum++;
         GameManager.Instance.suggestKey = leveldata.Key_Suggest;
         GameManager.Instance.suggestWord = leveldata.Suggest_Word;

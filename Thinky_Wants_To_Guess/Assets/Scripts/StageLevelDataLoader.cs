@@ -22,7 +22,10 @@ public class StageLevelDataLoader : MonoBehaviour
         TextAsset csvFile = Resources.Load<TextAsset>("stage_level_data");
         string[] lines = csvFile.text.Split('\n');
 
-        for (int i = 1; i < lines.Length; i++) // 0은 헤더니까 제외
+        int startIndex = 1 + 15 * (GameManager.Instance.stageNum - 1);
+        int endIndex = startIndex + 15;
+
+        for (int i = startIndex; i < endIndex && i < lines.Length; i++)
         {
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
 

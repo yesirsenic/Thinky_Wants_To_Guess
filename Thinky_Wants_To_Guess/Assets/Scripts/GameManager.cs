@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     public int maxLevelStage = 15;
 
+    public bool is_Demo { get; set; }
+
 
 
     private void Awake()
@@ -38,6 +40,8 @@ public class GameManager : MonoBehaviour
         }
 
         __Init__();
+
+        is_Demo = false;
     }
 
     private void Start()

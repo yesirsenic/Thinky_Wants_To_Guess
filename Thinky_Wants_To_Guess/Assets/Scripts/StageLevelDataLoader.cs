@@ -19,6 +19,8 @@ public class StageLevelDataLoader : MonoBehaviour
 
     void LoadCSV()
     {
+        GameManager.Instance.stageLevelDataList.Clear();
+
         TextAsset csvFile = Resources.Load<TextAsset>("stage_level_data");
         string[] lines = csvFile.text.Split('\n');
 

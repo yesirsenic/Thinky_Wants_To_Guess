@@ -68,6 +68,7 @@ public class DrawingCanvas : MonoBehaviour
 
 
         drawingView.texture = drawingRT;
+        drawingView.color = Color.white;
         Clear();
 
         brushColor = Color.black;
@@ -202,8 +203,16 @@ public class DrawingCanvas : MonoBehaviour
         {
             eraserPreview.localPosition = localPoint;
 
-            float size = brushSize;
-            eraserPreview.sizeDelta = new Vector2(size, size);
+            // 🔥 Canvas scaleFactor 가져오기
+            Canvas canvas = drawingView.canvas;
+            float scaleFactor = canvas != null ? canvas.scaleFactor : 1f;
+
+            // 🔥 RT → UI 변환
+            float scaleX = rect.rect.width / drawingRT.width;
+            float scaleY = rect.rect.height / drawingRT.height;
+
+            float previewSize = brushSize;
+            eraserPreview.sizeDelta = new Vector2(previewSize, previewSize);
         }
     }
 
@@ -239,6 +248,8 @@ public class DrawingCanvas : MonoBehaviour
         brushSize = eraserSizeSlider.value;
 
         eraserSetting.size = brushSize;
+
+        drawingToolButtonImage.sprite = drawingToolsImages[(int)currentBrush];
 
         Debug.Log(brushSize);
     }
@@ -276,7 +287,7 @@ public class DrawingCanvas : MonoBehaviour
     {
         float distance = Vector2.Distance(from, to);
 
-        int steps = Mathf.Max(1, Mathf.CeilToInt(distance * 200f));
+        int steps = Mathf.Max(1, Mathf.CeilToInt(distance * 1000f));
 
         if (steps <= 0)
         {
@@ -297,17 +308,46 @@ public class DrawingCanvas : MonoBehaviour
         if (float.IsNaN(uv.x) || float.IsNaN(uv.y))
             return;
 
-        float sizeUV = brushSize / Mathf.Min(drawingRT.width, drawingRT.height);
+        RectTransform rect = drawingView.rectTransform;
 
+        // 🔥 UI → RT 변환
+        float scaleX = drawingRT.width / rect.rect.width;
+        float scaleY = drawingRT.height / rect.rect.height;
+
+        // 🔥 핵심: 반지름 기준 + min 스케일
+        float brushSizeRT = (brushSize * 0.5f) * Mathf.Min(scaleX, scaleY);
+
+        // 🔥 UV 기준 변환
+        float sizeUV = brushSizeRT / Mathf.Min(drawingRT.width, drawingRT.height);
+
+        // 좌표 & 크기
         brushMaterial.SetVector("_Coordinate", uv);
         brushMaterial.SetFloat("_Size", sizeUV);
 
-        Color finalColor = currentBrush == BrushType.Eraser
-            ? Color.white
-            : brushColor;
+        // 🔥 지우개 여부
+        bool isEraser = currentBrush == BrushType.Eraser;
+        brushMaterial.SetFloat("_IsEraser", isEraser ? 1f : 0f);
 
+        // 🔥 색상
+        Color finalColor = isEraser ? Color.white : brushColor;
         brushMaterial.SetColor("_Color", finalColor);
 
+        // 🔥 alpha (연필/펜 차이)
+        float alpha = 1f;
+
+        if (!isEraser)
+        {
+            if (currentBrush == BrushType.Pencil)
+                alpha = 0.2f;   // 연필
+            else if (currentBrush == BrushType.Pen)
+                alpha = 1f;     // 펜
+            else if (currentBrush == BrushType.Brush)
+                alpha = 1f;
+        }
+
+        brushMaterial.SetFloat("_Alpha", alpha);
+
+        // 🔥 실제 그리기
         Graphics.Blit(drawingRT, tempRT);
         Graphics.Blit(tempRT, drawingRT, brushMaterial);
     }

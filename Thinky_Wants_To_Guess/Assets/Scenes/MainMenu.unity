@@ -1665,6 +1665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 735fd33d6209cc44c8b1a19248a4ddcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  screenModeDropdown: {fileID: 0}
 --- !u!4 &824111271
 Transform:
   m_ObjectHideFlags: 0
@@ -3570,6 +3571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 735fd33d6209cc44c8b1a19248a4ddcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  screenModeDropdown: {fileID: 1496333456}
 --- !u!1 &1507617125
 GameObject:
   m_ObjectHideFlags: 0

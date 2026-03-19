@@ -265,10 +265,10 @@ MonoBehaviour:
   brushColor: {r: 0, g: 0, b: 0, a: 1}
   currentBrush: 0
   pencilSetting:
-    size: 2.5
-    alpha: 0.1
+    size: 5
+    alpha: 1
   penSetting:
-    size: 2
+    size: 2.5
     alpha: 1
   brushSetting:
     size: 18
@@ -280,6 +280,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 86832f191e19e2b4286a4ac14c408bbb, type: 3}
   - {fileID: 21300000, guid: e4be69b3950b2074395de602058842c2, type: 3}
   - {fileID: 21300000, guid: 5e227d04459a6244b9d60394e88acee7, type: 3}
+  - {fileID: 21300000, guid: 8a010229ca6ef2744a9d1a19b2bf5552, type: 3}
   drawingToolButtonImage: {fileID: 1996939084}
   eraserSizeSlider: {fileID: 200646696}
   eraserPreview: {fileID: 803971415}
@@ -8112,7 +8113,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawingCanvas: {fileID: 98459252}
-  apiKey: 
   clearScore: 70
 --- !u!4 &1959283321
 Transform:

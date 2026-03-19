@@ -85,6 +85,11 @@ public class MainGameManager : MonoBehaviour
 
         dotsCoroutine = StartCoroutine(IntervalDots(ai_Text));
 
+        Debug.Log("GM_Stage Num" + GameManager.Instance.stageNum);
+        Debug.Log("GM_Stage Level" + GameManager.Instance.stageLevelNum);
+        Debug.Log("PPr_Stage Num" + PlayerPrefs.GetInt("MaxStage"));
+        Debug.Log("PPr_Stage Num" + PlayerPrefs.GetInt("MaxLevel"));
+
     }
 
     private void StageEnd()
@@ -118,10 +123,16 @@ public class MainGameManager : MonoBehaviour
 
     private void LevelClear()
     {
+        //15스테이지의 경우
+        if (GameManager.Instance.stageLevelNum == 15)
+        {
+            GameEndNextButton.SetActive(false);
+        }
+
         if (PlayerPrefs.GetInt("MaxStage") != GameManager.Instance.stageNum || PlayerPrefs.GetInt("MaxLevel") != GameManager.Instance.stageLevelNum)
             return;
 
-        if(PlayerPrefs.GetInt("MaxLevel") == GameManager.Instance.maxLevelStage)
+        if (PlayerPrefs.GetInt("MaxLevel") == GameManager.Instance.maxLevelStage)
         {
             PlayerPrefs.SetInt("MaxLevel", 1);
             PlayerPrefs.SetInt("MaxStage", PlayerPrefs.GetInt("MaxStage") + 1);
@@ -132,11 +143,7 @@ public class MainGameManager : MonoBehaviour
             PlayerPrefs.SetInt("MaxLevel", PlayerPrefs.GetInt("MaxLevel") + 1);
         }
 
-        //20스테이지의 경우
-        if(GameManager.Instance.stageLevelNum == 15)
-        {
-            GameEndNextButton.SetActive(false);
-        }
+        
     }
 
     private void ReloadScene()

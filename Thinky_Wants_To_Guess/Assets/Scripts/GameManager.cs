@@ -47,7 +47,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 120;
+        int hz = (int)Screen.currentResolution.refreshRateRatio.value;
+        Application.targetFrameRate = hz > 0 ? hz : 60;
     }
 
     private void __Init__()

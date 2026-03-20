@@ -25,8 +25,12 @@ public class StageButton : MonoBehaviour
 
         if(GameManager.Instance.is_Demo)
         {
+
+            if (stageNum < 2)
+                return;
+
             //데모를 위한 스테이지 락
-            if (stageNum == 2)
+            for (int i = 2; i<=10; i++)
             {
                 transform.GetChild(0).gameObject.SetActive(true);
                 gameObject.GetComponent<Button>().interactable = false;

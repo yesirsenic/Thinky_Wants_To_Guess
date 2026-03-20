@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
 
         __Init__();
 
-        is_Demo = false;
+        is_Demo = true;
     }
 
     private void Start()

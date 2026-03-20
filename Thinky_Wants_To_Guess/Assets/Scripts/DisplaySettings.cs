@@ -43,7 +43,13 @@ public class DisplaySettings : MonoBehaviour
 
     private void Start()
     {
+        if (screenModeDropdown == null)
+        {
+            screenModeDropdown = GetComponent<Dropdown>();
+        }
+
         int savedMode = PlayerPrefs.GetInt("ScreenMode", 1);
+
         // 🔥 드롭다운 먼저 맞춰주기
         screenModeDropdown.value = savedMode;
 

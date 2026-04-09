@@ -157,6 +157,12 @@ $@"{{
   ""max_tokens"": 200
 }}";
 
+        string savedKey = PlayerPrefs.GetString("User_OpenAI_Key");
+
+        string apiUrl = string.IsNullOrEmpty(savedKey)
+            ? "https://project-nnaxx.vercel.app/api/openai" // 기본: 개발자 프록시 서버
+            : "https://api.openai.com/v1/chat/completions"; // 엔드 콘텐츠: OpenAI 직접 호출
+
         using (UnityWebRequest request = new UnityWebRequest(
             "https://project-nnaxx.vercel.app/api/openai",
             "POST"))
@@ -166,6 +172,11 @@ $@"{{
             request.downloadHandler = new DownloadHandlerBuffer();
 
             request.SetRequestHeader("Content-Type", "application/json");
+
+            if (!string.IsNullOrEmpty(savedKey))
+            {
+                request.SetRequestHeader("Authorization", "Bearer " + savedKey);
+            }
 
             yield return request.SendWebRequest();
 

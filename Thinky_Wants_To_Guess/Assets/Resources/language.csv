@@ -11,6 +11,12 @@ Text_THINKING,생각하는 중,Thinking,思考中,考え中,Denkt nach,Pensando,
 Text_NEXT,다음,Next,下一个,次へ,Weiter,Próximo,Далее
 Text_MAINMENU,메인 메뉴,Main Menu,主菜单,メインメニュー,Hauptmenü,Menu Principal,Главное меню
 Text_RETRY,다시 시도,Retry,重试,再試行,Erneut versuchen,Tentar novamente,Повторить
+Text_Title_REPLAY_MODE,재플레이 모드 활성화,Activate Replay Mode,启用重玩模式,リプレイモード有効化,Replay-Modus aktivieren,Ativar Modo Replay,Активация режима повтора
+Text_DESC_REPLAY_API,이미 클리어한 스테이지를 다시 즐기시려면 개인 API 키가 필요해요!,You need a personal API key to replay stages you've already cleared!,若要再次游玩已通关的关卡，需要使用您的个人 API 密钥！,すでにクリアしたステージをもう一度楽しむには、個人のAPIキーが必要です！,Du benötigst einen persönlichen API-Schlüssel, um bereits abgeschlossene Level erneut zu spielen!,Você precisa de uma chave de API pessoal para jogar novamente as fases já concluídas!,Чтобы снова пройти уже завершенные уровни, вам понадобится личный ключ API!
+Text_BTN_CLOSE,닫기,Close,关闭,閉じる,Schließen,Fechar,Закрыть
+Text_BTN_PLAY,플레이!,Play!,开始！,プレイ！,Spielen!,Jogar!,Играть!
+Text_ERR_INVALID_FORMAT,올바른 API 키 형식이 아닙니다.,Invalid API key format.,API密钥格式不正确。,APIキーの形式が正しくありません。,Ungültiges API-Schlüsselformat.,Formato de chave de API inválido.,Неверный формат ключа API.
+Text_ERR_INVALID_KEY,유효하지 않거나 만료된 API 키입니다.,Invalid or expired API key.,API密钥无效或已过期。,無効または期限切れのAPIキーです。,Ungültiger oder abgelaufener API-Schlüssel.,Chave de API inválida ou expirada.,Недействительный или просроченный ключ API.
 Suggest_Apple,사과,Apple,苹果,りんご,Apfel,Maçã,Яблоко
 Suggest_Banana,바나나,Banana,香蕉,バナナ,Banane,Banana,Банан
 Suggest_Grape,포도,Grape,葡萄,ぶどう,Traube,uva,виноград

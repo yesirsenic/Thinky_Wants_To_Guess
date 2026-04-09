@@ -8,7 +8,13 @@ public class ButtonManager : MonoBehaviour
     //메인 메뉴
     public void ToStageSelectScene()
     {
-        SceneManager.LoadScene("StageSelect");
+        string savedKey = PlayerPrefs.GetString("User_OpenAI_Key");
+        int stageAllClear = PlayerPrefs.GetInt("StageAllClear", 0); 
+
+        if (stageAllClear != 1 || !string.IsNullOrEmpty(savedKey))
+        {
+            SceneManager.LoadScene("StageSelect");
+        }
     }
 
     public void Exit_Button()

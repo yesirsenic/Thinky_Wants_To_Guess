@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
 
         __Init__();
 
-        is_Demo = true;
+        is_Demo = false;
     }
 
     private void Start()
@@ -63,7 +63,5 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("MaxLevel", 1);
         }
-
-
     }
 }

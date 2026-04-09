@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\BGMManager.cs" />
     <Compile Include="Assets\Scripts\DisplaySettings.cs" />
     <Compile Include="Assets\Scripts\StageButton.cs" />
+    <Compile Include="Assets\Scripts\APIManager.cs" />
     <Compile Include="Assets\Scripts\StageLevelDataLoader.cs" />
     <Compile Include="Assets\Scripts\LanguageDropdown.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />

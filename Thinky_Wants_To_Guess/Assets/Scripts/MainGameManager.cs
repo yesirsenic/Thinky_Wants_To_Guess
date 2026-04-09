@@ -143,6 +143,11 @@ public class MainGameManager : MonoBehaviour
             PlayerPrefs.SetInt("MaxLevel", PlayerPrefs.GetInt("MaxLevel") + 1);
         }
 
+
+        if(PlayerPrefs.GetInt("MaxStage") >= 11)
+        {
+            PlayerPrefs.SetInt("StageAllClear", 1);
+        }
         
     }
 
